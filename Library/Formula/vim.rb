@@ -15,6 +15,7 @@ class Vim < Formula
 
   option "override-system-vi", "Override system vi"
   option "disable-nls", "Build vim without National Language Support (translated messages, keymaps)"
+  option "with-x", "Enable X11"
 
   LANGUAGES_OPTIONAL = %w(lua mzscheme perl tcl)
   LANGUAGES_DEFAULT  = %w(ruby python)
@@ -41,6 +42,11 @@ class Vim < Formula
     end
 
     opts << "--disable-nls" if build.include? "disable-nls"
+	if build.include? "with-x" 
+		opts << "--with-x" 
+	else
+		opts << "--without-x"
+	end
 
     if python
       if python.brewed?
@@ -66,7 +72,7 @@ class Vim < Formula
     system "./configure", "--prefix=#{HOMEBREW_PREFIX}",
                           "--mandir=#{man}",
                           "--enable-gui=no",
-                          "--without-x",
+						  "--enable-clientserver",
                           "--enable-multibyte",
                           "--with-tlib=ncurses",
                           "--enable-cscope",
